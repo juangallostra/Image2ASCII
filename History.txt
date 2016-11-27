@@ -1,5 +1,5 @@
 ﻿-----LOG-----
-Modificaciones pendientes y cosas a implementar
+Modificaciones pendientes y funcionalidades a implementar
   
 09/03/2016:
 (SOLVED)  - Modificar la manera de calcular los pesos de cada caracter
