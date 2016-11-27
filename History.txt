@@ -19,12 +19,11 @@ Modificaciones pendientes y cosas a implementar
   -Hoja de ruta:
       - Comentar y documentar código
       - Optimizar métodos que tratan con imágenes
-      - ¿Perfil Github?
-      - Renombrar variables y métodos
+(DONE)- Renombrar variables y métodos
       - Funcionalidades adicionales:
           - Permitir copiar texto a portapapeles / Guardar en un .txt
           - Permitir definir las dimensiones y resolución de salida
-          - Permitir que la conversión de la imagen sea a color
+(DONE)    - Permitir que la conversión de la imagen sea a color
           
 12/04/2016:
 (DONE)  - Rediseño UI
