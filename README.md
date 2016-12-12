@@ -1,7 +1,7 @@
 # Image2ASCII
 Program that converts images to ASCII art images. The user can interact with the program via simple friendly GUI.
 
-The project file is: Image2ASCII.csproj 
+The project file is: ```Image2ASCII.csproj``` 
 
 ## How does it work?
 
@@ -18,7 +18,7 @@ The main problem with this approach is that the resulting image has a low color 
 ## Program Logic
 
 The program logic can be found in the files:
-- Initialize.cs
-- HelperMethods.cs
+- ```Initialize.cs```
+- ```HelperMethods.cs```
 
 
