@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,9 +47,10 @@ namespace Image2ASCII
                 List<string> RowText = new List<string> { };
                 for (int i=0; i <BW_Image.Width;i++) // COLUMN
                 {
-                    double targetvalue =  (BlackAndWhite.GetPixel(i, j).R 
-                                         + BlackAndWhite.GetPixel(i, j).G 
-                                         + BlackAndWhite.GetPixel(i, j).B)/3;
+                    Color pixel = BlackAndWhite.GetPixel(i, j);
+                    double targetvalue =  (pixel.R 
+                                         + pixel.G 
+                                         + pixel.B)/3;
 
                     WeightedChar closestchar = characters.Where(t=>Math.Abs(t.Weight-targetvalue)==characters.Min(e => Math.Abs(e.Weight - targetvalue))).FirstOrDefault();
                     RowText.Add(closestchar.Character);
@@ -138,8 +139,8 @@ namespace Image2ASCII
                 for (int j = 0; j < btm.Height; j++)
                 {
                     // Visit https://en.wikipedia.org/wiki/Grayscale for 0.3, 0.59 & 0.11 values
-
-                    int ser = (int)(btm.GetPixel(i, j).R*0.3 + btm.GetPixel(i, j).G*0.59 + btm.GetPixel(i, j).B*0.11);
+                    Color pixel = btm.GetPixel(i, j);
+                    int ser = (int)(pixel.R*0.3 + pixel.G*0.59 + pixel.B*0.11);
                     btm.SetPixel(i, j, Color.FromArgb(ser, ser, ser));
                 }
             }

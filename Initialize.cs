@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -101,9 +101,10 @@ namespace Image2ASCII
             {
                 for (int j = 0; j < btm.Height; j++)
                 {
-                    totalsum = totalsum + (btm.GetPixel(i, j).R 
-                                        + btm.GetPixel(i, j).G 
-                                        + btm.GetPixel(i, j).B)/3;
+                    Color pixel = btm.GetPixel(i, j);
+                    totalsum = totalsum + (pixel.R 
+                                        + pixel.G 
+                                        + pixel.B)/3;
                 }
             }
             // Weight = (sum of (R+G+B)/3 for all pixels in image) / Area. (Where Area = Width*Height )
