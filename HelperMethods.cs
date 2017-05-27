@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,8 +14,9 @@ namespace Image2ASCII
     {
 
         // Se puede jugar con las resoluciones de imagen para ver cual da mejores resultados?
-        public static Image Convert2ASCII(Image BW_Image, List<WeightedChar> characters, out List<List<string>> ResultText)
+        public static Image Convert2ASCII(Image BW_Image, int? w, int? h, List<WeightedChar> characters, out List<List<string>> ResultText)
         {
+
             /*
              * ALGORITHM:
              * 
@@ -36,25 +37,48 @@ namespace Image2ASCII
              *       10- Add row text string to text holding string
              *  11 - return resulting Image & Text
              */
-            Image ResultImage = new Bitmap(BW_Image.Width * characters[0].CharacterImage.Width, BW_Image.Height * characters[0].CharacterImage.Height);
+
+            if (w == null & h == null)
+            {
+                w = 1;
+                h = 1;
+            }
+            int width = (int)w;
+            int height = (int)h;
+
+            // Be careful when Image.Width/widh or Image.Height/height are not integer values (coherent approximations)
+            Image ResultImage = new Bitmap(BW_Image.Width * characters[0].CharacterImage.Width/width, BW_Image.Height * characters[0].CharacterImage.Height/height);
             Graphics drawing = Graphics.FromImage(ResultImage);
             drawing.Clear(Color.White);
             ResultText = new List<List<string>> { };
             Bitmap BlackAndWhite = (Bitmap)BW_Image;
 
-            for (int j = 0; j < BW_Image.Height; j++) // ROW
+            for (int j = 0; j < BW_Image.Height; j+=height) // ROW
             {
                 List<string> RowText = new List<string> { };
-                for (int i=0; i <BW_Image.Width;i++) // COLUMN
+                for (int i=0; i <BW_Image.Width; i+=width) // COLUMN
                 {
-                    Color pixel = BlackAndWhite.GetPixel(i, j);
-                    double targetvalue =  (pixel.R 
-                                         + pixel.G 
-                                         + pixel.B)/3;
+                    double targetvalue = 0;
 
+                    for (int nj=j; nj<j+height; nj++)
+                    {
+                        for (int ni = i; ni < i+width; ni++)
+                        {
+                            // Sum all the pixels in neighbourhood and average
+                            try
+                            {
+                                targetvalue += BlackAndWhite.GetPixel(ni, nj).R;
+                            }
+                            catch (Exception)
+                            {
+                                targetvalue += 128;
+                            }
+                        }
+                    }
+                    targetvalue /= (width * height);
                     WeightedChar closestchar = characters.Where(t=>Math.Abs(t.Weight-targetvalue)==characters.Min(e => Math.Abs(e.Weight - targetvalue))).FirstOrDefault();
                     RowText.Add(closestchar.Character);
-                    drawing.DrawImage(closestchar.CharacterImage, i * closestchar.CharacterImage.Width, j * closestchar.CharacterImage.Height);
+                    drawing.DrawImage(closestchar.CharacterImage, (i/width) * closestchar.CharacterImage.Width, (j/height) * closestchar.CharacterImage.Height);
                 }
                 ResultText.Add(RowText);
             }
@@ -138,9 +162,7 @@ namespace Image2ASCII
             {
                 for (int j = 0; j < btm.Height; j++)
                 {
-                    // Visit https://en.wikipedia.org/wiki/Grayscale for 0.3, 0.59 & 0.11 values
-                    Color pixel = btm.GetPixel(i, j);
-                    int ser = (int)(pixel.R*0.3 + pixel.G*0.59 + pixel.B*0.11);
+                    int ser = (int)(btm.GetPixel(i, j).R*0.3 + btm.GetPixel(i, j).G*0.59 + btm.GetPixel(i, j).B*0.11);
                     btm.SetPixel(i, j, Color.FromArgb(ser, ser, ser));
                 }
             }
@@ -150,7 +172,7 @@ namespace Image2ASCII
         public unsafe static void AdjustContrast(Bitmap bmp, double contrast)
         {
             {
-                byte[] contrast_lookup = new byte[256];
+                byte[] contrast_lookup_table = new byte[256];
                 double newValue = 0;
                 double c = (100.0 + contrast) / 100.0;
 
@@ -169,7 +191,7 @@ namespace Image2ASCII
                         newValue = 0;
                     if (newValue > 255)
                         newValue = 255;
-                    contrast_lookup[i] = (byte)newValue;
+                    contrast_lookup_table[i] = (byte)newValue;
                 }
 
                 var bitmapdata = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
@@ -182,9 +204,9 @@ namespace Image2ASCII
                     byte* destPixels = (byte*)bitmapdata.Scan0 + (y * bitmapdata.Stride);
                     for (int x = 0; x < bitmapdata.Width; x++)
                     {
-                        destPixels[x * PixelSize] = contrast_lookup[destPixels[x * PixelSize]]; // B
-                        destPixels[x * PixelSize + 1] = contrast_lookup[destPixels[x * PixelSize + 1]]; // G
-                        destPixels[x * PixelSize + 2] = contrast_lookup[destPixels[x * PixelSize + 2]]; // R
+                        destPixels[x * PixelSize] = contrast_lookup_table[destPixels[x * PixelSize]]; // B
+                        destPixels[x * PixelSize + 1] = contrast_lookup_table[destPixels[x * PixelSize + 1]]; // G
+                        destPixels[x * PixelSize + 2] = contrast_lookup_table[destPixels[x * PixelSize + 2]]; // R
                         //destPixels[x * PixelSize + 3] = contrast_lookup[destPixels[x * PixelSize + 3]]; //A
                     }
                 }
@@ -220,8 +242,8 @@ namespace Image2ASCII
 
             // Create a brush for the text
             Brush textBrush = new SolidBrush(textColor);
-
-            drawing.DrawString(text, System.Drawing.SystemFonts.DefaultFont, textBrush, (WidthAndHeight.Width - textSize.Width) / 2, 0); // El punto de inserción del carácter se puede afinar más (Trial & Error)
+			// El punto de inserción del carácter se puede afinar más (Trial & Error)
+            drawing.DrawString(text, System.Drawing.SystemFonts.DefaultFont, textBrush, (WidthAndHeight.Width - textSize.Width) / 2, 0);
             drawing.Save();
 
             textBrush.Dispose();

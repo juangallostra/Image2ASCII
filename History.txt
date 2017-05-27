@@ -1,0 +1,39 @@
+﻿-----LOG-----
+Modificaciones pendientes y cosas a implementar
+  
+09/03/2016:
+(SOLVED)  - Modificar la manera de calcular los pesos de cada caracter
+(SOLVED)  - Pensar como convertimos de Bitmap -> ASCII :
+              - Metodo:
+                  - Pixel a pixel?
+                  - Agrupación de pixeles ?
+                  - Pixel a pixel sobre la imagen escalada ?
+(SOLVED)      - Habría que solucionar los problemas con el escalado 
+(SOLVED)      - Renderizado de la imagen una vez tenemos los carácteres que van a formar la imagen
+(SOLVED)  - Método para guardar la imagen una vez convertida a ASCII
+
+17/03/2016:
+  - V.1.0.0 Released
+  
+04/04/2016:
+  -Hoja de ruta:
+      - Comentar y documentar código
+      - Optimizar métodos que tratan con imágenes
+      - ¿Perfil Github?
+      - Renombrar variables y métodos
+      - Funcionalidades adicionales:
+          - Permitir copiar texto a portapapeles / Guardar en un .txt
+          - Permitir definir las dimensiones y resolución de salida
+          - Permitir que la conversión de la imagen sea a color
+          
+12/04/2016:
+(DONE)  - Rediseño UI
+(DONE)  - Implementación conversión a color
+(DONE)  - Corrección de errores:
+              - Cuando cargabas una imagen nueva y habías
+                cambiado el contraste de la anterior no
+                convertía la imagen nueva si no que seguía con la antigua
+              - Trackbar vuelve a 0 cuando abres una imagen nueva
+		- TODOs:
+			- Aumentar la densidad de carácteres cuando la conversión es
+			  a color.

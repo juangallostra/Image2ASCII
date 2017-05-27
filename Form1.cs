@@ -79,7 +79,26 @@ namespace Image2ASCII
                 {
                     Imagen_BW = (Image)HelperMethods.Grayscale(ResizedImage_O); // Get grayscale image
                 }
-                ResultImage = HelperMethods.Convert2ASCII(Imagen_BW, CharSet,out ResultText);
+                // Test if there are Width and Height values on the pixel per character textboxes
+                int? width = null;
+                int? height = null;
+                if  (PixelsToCharacterWidth.Text != "" & PixelsToCharacterHeight.Text != "")
+                {
+                    // Convert them to integers
+                    try
+                    {
+                        width = Int32.Parse(PixelsToCharacterWidth.Text);
+                        height = Int32.Parse(PixelsToCharacterHeight.Text);
+                    }
+                    catch (Exception)
+                    {
+
+                        throw new System.FormatException("Width and Height values must be integers");
+                    }
+
+                }
+
+                ResultImage = HelperMethods.Convert2ASCII(Imagen_BW, width, height, CharSet,out ResultText);
                 ImageText = ResultText;
                 if (IsBlackAndWhite.Checked)
                     pictureBox2.Image = HelperMethods.ResizeImage(ResultImage, pictureBox2);
@@ -136,16 +155,12 @@ namespace Image2ASCII
             ResizedImage_O = null;
             Imagen_BW = null;
             ResultImage = null;
-
-
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
 
         }
-
-
 
 
     }

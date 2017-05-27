@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,8 +78,7 @@ namespace Image2ASCII
             // Make sure generalsize is made of integers 
             generalsize.Width = ((int)generalsize.Width);
             generalsize.Height = ((int)generalsize.Height);
-            // and size defines a square to maintain image proportions
-            // as the ASCII transformation will be 1 pixel = 1 character Image
+            // and that size defines a square to maintain image proportions
             // thus substituting one pixel by one character image
             if (generalsize.Width > generalsize.Height)
                 generalsize.Height = generalsize.Width;
@@ -101,10 +100,9 @@ namespace Image2ASCII
             {
                 for (int j = 0; j < btm.Height; j++)
                 {
-                    Color pixel = btm.GetPixel(i, j);
-                    totalsum = totalsum + (pixel.R 
-                                        + pixel.G 
-                                        + pixel.B)/3;
+                    totalsum = totalsum + (btm.GetPixel(i, j).R 
+                                        + btm.GetPixel(i, j).G 
+                                        + btm.GetPixel(i, j).B)/3;
                 }
             }
             // Weight = (sum of (R+G+B)/3 for all pixels in image) / Area. (Where Area = Width*Height )
