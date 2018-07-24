@@ -21,4 +21,10 @@ The program logic can be found in the files:
 - `Initialize.cs`
 - `HelperMethods.cs`
 
+## Want to know more?
+
+Here you can find a more in-depth explanation:
+* [Part 1](https://bitesofcode.wordpress.com/2017/01/19/converting-images-to-ascii-art-part-1/)
+* [Part 2](https://bitesofcode.wordpress.com/2017/05/27/converting-images-to-ascii-art-part-2/)
+
 
